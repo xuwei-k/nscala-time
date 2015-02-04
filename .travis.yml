@@ -8,3 +8,14 @@ jdk:
   - openjdk7
   - openjdk6
 sudo: false
+script:
+  - if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_SCALA_VERSION}" == "publish-snapshot" ]]; then sbt '+test' '+publish'; else sbt ++${TRAVIS_SCALA_VERSION} test; fi
+env:
+  global:
+  - secure: Hxcn82AVe+t+rJYBdGGCkmmk6Wg4O/3C2aE0L+GKpPEYb5mQ1ojT/fIhmFEQpj2e9qjW4ZkuyJLgiEX8Fw6ENIHAcA6yqjCLj15w18BBhiWtNkobb1s9TELh72k47O2KFCwoBiIuUpZlTZLrVxeluY59JeWqLEanGYBoXJ6ChPU=
+  - secure: kkHjj54G2PsrU1uLzlUuFDNTUpIYsAvVdytKoNhF0aqz+OCS6faD7aMdfMqki1TRJMv1RtXOjD86cYR0kOPX/xIVaERXzAgepSq8TlP9ydTrTquWRAjW+kIa3G2X+oePsqd7fN20/RqZHcGu0hDZDilqgCr94zabTghqAUv09O8=
+
+matrix:
+  include:
+    - scala: "publish-snapshot"
+      jdk: oraclejdk7

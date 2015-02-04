@@ -92,14 +92,6 @@ pomExtra := (
   </developers>
 )
 
-publishTo <<= version { v =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.endsWith("-SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
 credentials ++= {
   val sonatype = ("Sonatype Nexus Repository Manager", "oss.sonatype.org")
   def loadMavenCredentials(file: java.io.File) : Seq[Credentials] = {
@@ -117,3 +109,8 @@ credentials ++= {
     case _ => Nil
   }
 }
+
+credentials ++= PartialFunction.condOpt(sys.env.get("SONATYPE_USER") -> sys.env.get("SONATYPE_PASSWORD")){
+  case (Some(user), Some(password)) =>
+    Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, password)
+}.toList
